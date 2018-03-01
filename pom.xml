@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.sargije.rest.hidmet</groupId>
+  <artifactId>hidmetrest</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <properties>
+     <java.version>1.7</java.version>
+  </properties>
+    
+  <name>hidmetrest</name>
+  
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- tag::springjpa -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- end::springjpa -->
+		<dependency>
+		    <groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		
+		<!-- tag::devtools izbrisati u produkciji -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- end::devtools izbrisati u produkciji -->
+        
+        <!-- Data Mining -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+    </dependencies>
+    
+
+    <build>
+
+        <plugins>
+        
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                	<outputDirectory>webapps</outputDirectory>
+                	<finalName>ROOT</finalName>
+                	<addResources>true</addResources>
+            	 	<profiles>
+		           		 <profile>openshift</profile>
+		            </profiles>                	
+                </configuration>     	
+            </plugin>
+ 
+           <plugin>
+		       <artifactId>maven-war-plugin</artifactId>
+		       <configuration>
+		              <webResources>
+						<resource>
+							<directory>deploy/openshift</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<filtering>false</filtering>
+							<includes>
+								<include>application.properties</include>
+							</includes>
+						</resource>
+					</webResources>
+		 		</configuration>
+		     </plugin>
+        </plugins>
+    </build>
+    
+	<profiles>
+        <profile>
+			<id>openshift</id>
+			<activation>
+	  			<activeByDefault>false</activeByDefault>
+	  			<property>
+	  				<name>serverName</name>
+	  				<value>openshift</value>
+	  			</property>
+	  		</activation>
+	  		<properties>
+	  			<deploy.dir>deploy/openshift</deploy.dir>
+	  		</properties>
+		</profile>
+    </profiles>
+</project>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../css/mystyle.css" />
+</head>
+	<body>
+	    <main id="posts">
+		    <article th:each="p : ${listCities}">
+		       <th:block th:each="c : ${listFiveDayForecast}"  th:switch="${c.cityId.cityName}" th:case="${p.cityName}">
+		       	<div class="date" >
+			       	<ul>
+			       		<li th:text="${p.cityName}">grad</li>
+			       		<li th:text="${#dates.format(c.dateId.forecastDate, 'dd-MMM-yyyy')}">datum</li>
+			       		<li th:text="${c.maxTemperature}">Max</li>
+			       		<li th:text="${c.minTemperature}">Min</li>
+			        </ul>
+		        </div>
+		      </th:block>  
+		    </article>
+		</main>
+	</body>
+</html>
